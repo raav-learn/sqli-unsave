@@ -17,8 +17,7 @@ class Db {
             $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (Exception $ex) {
             // exception handling
-            echo "Connection failed";
-            exit;
+            $this->error("Connection failed", $ex);
         }
     }
 
@@ -32,14 +31,37 @@ class Db {
         }
         catch(PDOException $e)
         {
-            echo $sql . "<br>" . $e->getMessage();
             // exception handling
+            $this->error($sql, $e);
+        }
+    }
+
+    function login($username, $password) {
+        try {
+            $sql = "SELECT `username`, `email` FROM `users` WHERE `username`='$username' AND `password`='$password' LIMIT 1;"; //sqli ready xD
+
+            $result = null;
+            foreach ($this->connection->query($sql) as $row) {
+                $result = $row;
+                break;
+            };
+
+            if (!is_null($result)) {
+                return $result;
+            } else {
+                return false;
+            }
+        }
+        catch(PDOException $e)
+        {
+            // exception handling
+            $this->error($sql, $e);
         }
     }
 
     function save_hash($plain_password, $secure_password) {
         try {
-            $sql = "INSERT IGNORE INTO `hashlist` (`password`, `hash`)
+            $sql = "INSERT IGNORE INTO `hash_list` (`password`, `hash`)
                     VALUES (:plain, :secure)"; //sqli ready xD
 
             // prepare sql and bind parameters
@@ -50,12 +72,16 @@ class Db {
         }
         catch(PDOException $e)
         {
-            //echo $sql . "<br>" . $e->getMessage();
-            // exception handling
+            $this->error($sql, $e);
         }
     }
 
     function close() {
         $this->connection = null;
+    }
+
+    private function error($sql, $exception) {
+        echo $sql . "<br>" . $exception->getMessage();
+        exit;
     }
 }

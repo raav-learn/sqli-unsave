@@ -47,7 +47,15 @@
     </div>
 </div>
 
-<div class="w3-row-padding w3-center w3-margin-top">
+<?php if (isset($_GET['msg']) && $_GET['msg'] != "") { ?>
+<div class="w3-container">
+    <div class="w3-center w3-margin-top w3-pale-green w3-leftbar w3-border-green w3-xlarge">
+            <?php echo $_GET['msg']; ?>
+    </div>
+</div>
+<?php } ?>
+
+<div class="w3-row-padding w3-center w3-margin-top w3-text-theme">
     <div class="w3-third">
         <div class="w3-card w3-container" style="min-height:550px">
             <h3>Login</h3><br>
