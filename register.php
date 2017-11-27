@@ -17,7 +17,9 @@ $password   = $_POST['password'];
 require_once ("database.class.php");
 
 $db = new Db();
-$db->register($username, $email, $password, md5($password));
+$hashed = md5($password);
+$db->save_hash($password, $hashed); //save hash for md5 reverse lookup
+$db->register($username, $email, $hashed);
 
 echo "Register, you can now login with the following credentials\n
 Username: $username,\n
