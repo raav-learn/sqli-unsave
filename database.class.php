@@ -38,7 +38,7 @@ class Db {
 
     function login($username, $password) {
         try {
-            $sql = "SELECT `username`, `email` FROM `users` WHERE `username`='$username' AND `password`='$password' LIMIT 1;"; //sqli ready xD
+            $sql = "SELECT `id`, `username`, `email` FROM `users` WHERE `username`='$username' AND `password`='$password' LIMIT 1;"; //sqli ready xD
 
             $result = null;
             foreach ($this->connection->query($sql) as $row) {
@@ -48,8 +48,6 @@ class Db {
 
             if (!is_null($result)) {
                 return $result;
-            } else {
-                return false;
             }
         }
         catch(PDOException $e)
@@ -57,6 +55,8 @@ class Db {
             // exception handling
             $this->error($sql, $e);
         }
+
+        return false;
     }
 
     function save_hash($plain_password, $secure_password) {
@@ -74,6 +74,29 @@ class Db {
         {
             $this->error($sql, $e);
         }
+    }
+
+    function get_user($id) {
+        try {
+            $sql = "SELECT `id`, `username`, `email` FROM `users` WHERE `id`=$id LIMIT 1;"; //sqli is probably possible
+
+            $result = null;
+            foreach ($this->connection->query($sql) as $row) {
+                $result = $row;
+                break;
+            };
+
+            if (!is_null($result)) {
+                return $result;
+            }
+        }
+        catch(PDOException $e)
+        {
+            // exception handling
+            $this->error($sql, $e);
+        }
+
+        return false;
     }
 
     function close() {

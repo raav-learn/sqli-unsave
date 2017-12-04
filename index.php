@@ -1,3 +1,14 @@
+<?php
+session_start();
+require_once ("database.class.php");
+$db = new Db();
+
+if (isset($_SESSION['user'])) {
+    header("Location: loggedin.php");
+    exit;
+}
+
+?>
 <!DOCTYPE html>
 <html>
 <title>SQLi Unsave | home</title>

@@ -1,4 +1,12 @@
 <?php
+session_start();
+require_once ("database.class.php");
+$db = new Db();
+
+if (isset($_SESSION['user'])) {
+    header("Location: loggedin.php");
+    exit;
+}
 
 //Check if all parameters are present
 if (!(
