@@ -35,4 +35,3 @@ if ($user == false) {
 //echo "Register, you can now login with the following credentials\n
 //Username: $username,\n
 //Password: $password,";
-

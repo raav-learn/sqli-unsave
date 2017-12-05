@@ -11,7 +11,12 @@ if (isset($_SESSION['user'])) {
     exit;
 }
 
-$username = $user['username'];
+if (!isset($_GET['search'])) {
+    header("Location: loggedin.php?msg=No%20search%20parameter");
+    exit;
+}
+
+$search_results = $db->get_user_by_username($_GET['search'])
 ?>
 <!DOCTYPE html>
 <html>
@@ -63,40 +68,25 @@ $username = $user['username'];
     </div>
 </div>
 
-<?php if (isset($_GET['msg']) && $_GET['msg'] != "") { ?>
-<div class="w3-container">
-    <div class="w3-center w3-margin-top w3-pale-green w3-leftbar w3-border-green w3-xlarge">
-            <?php echo $_GET['msg']; ?>
-    </div>
-</div>
-<?php } ?>
-
 <div class="w3-row-padding w3-center w3-margin-top w3-text-theme">
-    <div class="w3-twothird">
         <div class="w3-card w3-container" style="min-height:550px">
-            <h3>Welcome <?php echo $username; ?></h3><br>
-            <i class="fa fa-user-secret w3-margin-bottom w3-text-theme" style="font-size:120px"></i>
-            <p>You have accessed your private welcome page because you successfully logged in.</p>
+            <h3>Search results</h3><?php echo count($search_results); ?> of max 100<br>
+            <ul class="w3-ul w3-card-4">
+                <?php
+                foreach ($search_results as $result) {
+                    ?>
+                    <li class="w3-bar" style="display: list-item;">
+                        <i class="fa fa-user w3-bar-item w3-circle" style="font-size:25px" aria-hidden="true"></i>
+                        <div class="w3-bar-item">
+                            <span class="w3-large"><?php echo $result['username']; ?></span><br>
+                        </div>
+                    </li>
+                    <?php
+                }
+                ?>
+            </ul>
             <p></p>
         </div>
-    </div>
-
-    <div class="w3-third">
-        <div class="w3-card w3-container" style="min-height:550px">
-            <h3>Search user</h3><br>
-            <i class="fa fa-search w3-margin-bottom w3-text-theme" style="font-size:120px"></i>
-            <form action="search.php" method="get" enctype="application/x-www-form-urlencoded">
-                <div class="w3-section">
-                    <label for="search">Username</label>
-                    <input class="w3-input"  type="text" name="search" />
-                </div>
-
-                <div>
-                    <input type="submit" value="search" class="w3-btn w3-xlarge w3-dark-grey w3-hover-light-grey" />
-                </div>
-            </form>
-        </div>
-    </div>
 </div>
 <br />
 <!-- Footer -->

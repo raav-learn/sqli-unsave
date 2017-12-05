@@ -99,12 +99,55 @@ class Db {
         return false;
     }
 
+    function get_user_by_username($username) {
+        try {
+            $sql = "SELECT `username` FROM `users` WHERE `username` LIKE '%$username%' LIMIT 100;"; //sqli ready
+
+            $result = [];
+            foreach ($this->connection->query($sql) as $row) {
+                array_push($result, $row);
+            };
+
+            return $result;
+        }
+        catch(PDOException $e)
+        {
+            // exception handling
+            $this->error($sql, $e);
+        }
+
+        return false;
+    }
+
     function close() {
         $this->connection = null;
     }
 
     private function error($sql, $exception) {
-        echo $sql . "<br>" . $exception->getMessage();
+        ?>
+        <!DOCTYPE html>
+        <html>
+        <title>SQLi Unsave | home</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-teal.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
+        <body>
+        <div class="w3-container">
+            <div class="w3-container w3-red">
+                <h2>SQL ERROR</h2>
+                <p><?php echo $sql; ?></p>
+            </div>
+            <div class="w3-container w3-gray">
+                <?php echo $exception->getMessage(); ?>
+            </div>
+        </div>
+        <?php
+
+        ?>
+        </body></html>
+        <?php
         exit;
     }
 }
