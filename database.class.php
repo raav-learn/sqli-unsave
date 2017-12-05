@@ -23,6 +23,19 @@ class Db {
 
     function register($username, $email, $password) {
         try {
+
+            #save
+//            $sql = "INSERT INTO `users` (`username`, `email`, `password`)
+//                    VALUES (:username, :email, :password)";
+//
+//            $stmt = $this->connection->prepare($sql);
+//            $stmt->bindParam(':username', $username);
+//            $stmt->bindParam(':email', $email);
+//            $stmt->bindParam(':password', $password);
+//            $stmt->execute();
+
+
+            # Unsave
             $sql = "INSERT INTO `users` (`username`, `email`, `password`)
                     VALUES ('$username', '$email', '$password')"; //sqli ready xD
 
@@ -38,6 +51,20 @@ class Db {
 
     function login($username, $password) {
         try {
+            #Save
+//            $sql = "SELECT `id`, `username`, `email` FROM `users` WHERE `username`=:username AND `password`=:password LIMIT 1;";
+//            $stmt = $this->connection->prepare($sql);
+//            $stmt->bindParam(':username', $username);
+//            $stmt->bindParam(':password', $password);
+//            $result = null;
+//
+//            if ($stmt->execute()) {
+//                while ($row = $stmt->fetch()) {
+//                    $result = $row;
+//                }
+//            };
+
+            #Unsave
             $sql = "SELECT `id`, `username`, `email` FROM `users` WHERE `username`='$username' AND `password`='$password' LIMIT 1;"; //sqli ready xD
 
             $result = null;
@@ -78,6 +105,19 @@ class Db {
 
     function get_user($id) {
         try {
+            ## Getting data using prepared statement
+//            $sql = "SELECT `id`, `username`, `email` FROM `users` WHERE `id`= ? LIMIT 1;";
+//            $stmt = $this->connection->prepare($sql);
+//
+//            $result = null;
+//            if ($stmt->execute([$id])) {
+//                while ($row = $stmt->fetch()) {
+//                    $result = $row;
+//                }
+//            };
+
+
+            # Unsecure
             $sql = "SELECT `id`, `username`, `email` FROM `users` WHERE `id`=$id LIMIT 1;"; //sqli is probably possible
 
             $result = null;
@@ -101,6 +141,18 @@ class Db {
 
     function get_user_by_username($username) {
         try {
+
+//            ## Getting data using prepared statement
+//            $sql = "SELECT `username` FROM `users` WHERE `username` LIKE ? LIMIT 100;";
+//            $stmt = $this->connection->prepare($sql);
+//            $result = [];
+//            if ($stmt->execute(["%".$username."%"])) {
+//                while ($row = $stmt->fetch()) {
+//                    array_push($result, $row);
+//                }
+//            };
+
+//          # Getting data using insecure statement
             $sql = "SELECT `username` FROM `users` WHERE `username` LIKE '%$username%' LIMIT 100;"; //sqli ready
 
             $result = [];
